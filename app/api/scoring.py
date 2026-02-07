@@ -26,5 +26,7 @@ def score_user(user_id: int, db: Session = Depends(get_db)):
 
     if not row:
         raise HTTPException(status_code=404, detail="User not found")
+    return score_user_profile(dict(row._mapping))
 
-    return score_user_profile(dict(row))
+
+  
