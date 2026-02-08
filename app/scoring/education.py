@@ -1,3 +1,4 @@
+from decimal import Decimal
 def score_education(profile: dict):
     score = 0
     feedback = []
@@ -31,7 +32,7 @@ def score_education(profile: dict):
         })
 
     # CGPA (15 pts)
-    if isinstance(cgpa, (int, float)):
+    if isinstance(cgpa, (int, float, Decimal)):
         if cgpa >= 9.0:
             score += 15
         elif cgpa >= 8.0:
