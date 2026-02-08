@@ -17,7 +17,7 @@ def score_user_profile(profile):
 
     final_score = (
         edu["education_score"]
-        + skills["skill_score"]
+        + skills["skills_score"]     # ✅ FIXED
         + projects["project_score"]
     )
 
