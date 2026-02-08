@@ -5,9 +5,6 @@ from app.scoring.feedback import aggregate_feedback
 
 
 def readiness_level(score: int) -> str:
-    """
-    Determines internship readiness level based on final score.
-    """
     if score < 40:
         return "Low"
     elif score < 70:
@@ -16,44 +13,21 @@ def readiness_level(score: int) -> str:
 
 
 def score_user_profile(profile: dict) -> dict:
-    """
-    Computes the complete internship readiness score (out of 100)
-    and aggregates structured feedback.
-    """
+    edu = score_education(profile)
+    skills = score_skills(profile.get("skills", []))
+    projects = score_projects(profile.get("projects", []))
 
-    # ─────────────────────────────────────────
-    # 1️⃣ SCORE EACH PILLAR
-    # ─────────────────────────────────────────
-    education_result = score_education(profile)
-    skills_result = score_skills(profile.get("skills", []))
-    projects_result = score_projects(profile.get("projects", []))
-
-    # ─────────────────────────────────────────
-    # 2️⃣ COMPUTE FINAL SCORE
-    # ─────────────────────────────────────────
-    education_score = education_result["education_score"]
-    skills_score = skills_result["skills_score"]
-    project_score = projects_result["project_score"]
+    education_score = edu["education_score"]
+    skills_score = skills["skills_score"]
+    project_score = projects["project_score"]
 
     final_score = education_score + skills_score + project_score
-
-    # Safety cap (should already be correct, but defensive)
     final_score = min(final_score, 100)
 
-    # ─────────────────────────────────────────
-    # 3️⃣ AGGREGATE FEEDBACK
-    # ─────────────────────────────────────────
-    feedback = aggregate_feedback(
-        education_result,
-        skills_result,
-        projects_result
-    )
+    feedback = aggregate_feedback(edu, skills, projects)
 
-    # ─────────────────────────────────────────
-    # 4️⃣ FINAL RESPONSE
-    # ─────────────────────────────────────────
     return {
-        "education_score": education_score,   # useful for debugging / UI
+        "education_score": education_score,
         "skills_score": skills_score,
         "project_score": project_score,
         "final_score": final_score,

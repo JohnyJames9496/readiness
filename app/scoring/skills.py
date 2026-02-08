@@ -1,12 +1,10 @@
-# app/scoring/skills.py
-
 ADVANCED_SKILLS = {
     "fastapi", "docker", "aws", "kubernetes", "spring boot"
 }
 
 INTERMEDIATE_SKILLS = {
-    "python", "django", "react", "postgresql", "mysql",
-    "sql", "javascript", "nodejs"
+    "python", "django", "react", "postgresql",
+    "mysql", "sql", "javascript", "nodejs"
 }
 
 BEGINNER_SKILLS = {
@@ -31,7 +29,6 @@ def score_skills(skills: list):
         }
 
     skills_lower = [s.lower() for s in skills]
-
     advanced_found = False
 
     for skill in skills_lower:
@@ -48,16 +45,13 @@ def score_skills(skills: list):
             "area": "skills",
             "severity": "medium",
             "summary": "No advanced-level skills detected.",
-            "reasons": [
-                "All listed skills are beginner or intermediate level"
-            ],
-            "action": "Add at least one advanced-level skill such as FastAPI, Docker, or AWS."
+            "reasons": ["Only beginner or intermediate skills listed"],
+            "action": "Add at least one advanced-level skill like FastAPI, Docker, or AWS."
         })
 
-    # Cap at 25
-    final_score = min(score, 25)
+    score = min(score, 25)
 
     return {
-        "skills_score": final_score,   # ✅ FIXED KEY
+        "skills_score": score,
         "feedback": feedback
     }

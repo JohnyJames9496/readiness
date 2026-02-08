@@ -1,34 +1,67 @@
-def score_education(profile):
+def score_education(profile: dict):
     score = 0
     feedback = []
 
-    if profile.get("college"):
+    college = profile.get("college")
+    course = profile.get("course")
+    cgpa = profile.get("cgpa")
+
+    # College name (2 pts)
+    if college:
         score += 2
     else:
-        feedback.append("Add a valid college name.")
+        feedback.append({
+            "area": "education",
+            "severity": "medium",
+            "summary": "College name missing.",
+            "reasons": ["College name is not provided"],
+            "action": "Add your college or university name."
+        })
 
-    if profile.get("course"):
+    # Course name (3 pts)
+    if course:
         score += 3
     else:
-        feedback.append("Add a valid course name.")
+        feedback.append({
+            "area": "education",
+            "severity": "medium",
+            "summary": "Course name missing.",
+            "reasons": ["Course or degree name is not provided"],
+            "action": "Add your degree or course name."
+        })
 
-    try:
-        cgpa = float(profile.get("cgpa"))
-        if cgpa < 6:
-            cgpa_score = 0
-        elif cgpa < 7:
-            cgpa_score = 6
-        elif cgpa < 8:
-            cgpa_score = 9
-        elif cgpa < 9:
-            cgpa_score = 12
+    # CGPA (15 pts)
+    if isinstance(cgpa, (int, float)):
+        if cgpa >= 9.0:
+            score += 15
+        elif cgpa >= 8.0:
+            score += 10
+            feedback.append({
+                "area": "education",
+                "severity": "low",
+                "summary": "CGPA could be higher.",
+                "reasons": ["CGPA is below 9.0"],
+                "action": "Improve CGPA to 9.0+ to maximize education score."
+            })
         else:
-            cgpa_score = 15
-    except:
-        cgpa_score = 0
-        feedback.append("Add valid CGPA (0–10 scale).")
+            score += 5
+            feedback.append({
+                "area": "education",
+                "severity": "medium",
+                "summary": "Low CGPA.",
+                "reasons": ["CGPA is significantly below expected threshold"],
+                "action": "Focus on improving academic performance."
+            })
+    else:
+        feedback.append({
+            "area": "education",
+            "severity": "high",
+            "summary": "CGPA missing.",
+            "reasons": ["CGPA is not provided"],
+            "action": "Add your CGPA."
+        })
 
     return {
-        "education_score": score + cgpa_score,
+        "education_score": score,
         "feedback": feedback
     }
