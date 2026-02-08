@@ -1,14 +1,70 @@
 ADVANCED_SKILLS = {
-    "fastapi", "docker", "aws", "kubernetes", "spring boot"
+     "fastapi",
+    "spring boot",
+    "microservices",
+    "docker",
+    "docker compose",
+    "kubernetes",
+    "aws",
+    "gcp",
+    "azure",
+    "ci/cd",
+    "github actions",
+    "grpc",
+    "graphql",
+    "celery",
+    "rabbitmq",
+    "kafka",
+    "terraform",
+    "system design",
+    "distributed systems",
+    "cloud deployment"
 }
 
 INTERMEDIATE_SKILLS = {
-    "python", "django", "react", "postgresql",
-    "mysql", "sql", "javascript", "nodejs"
+   "python",
+    "django",
+    "flask",
+    "fastapi basics",
+    "java",
+    "spring",
+    "nodejs",
+    "express",
+    "react",
+    "nextjs",
+    "postgresql",
+    "mysql",
+    "mongodb",
+    "redis",
+    "rest api",
+    "jwt",
+    "sqlalchemy",
+    "orm",
+    "linux",
+    "nginx"
 }
 
 BEGINNER_SKILLS = {
-    "git", "html", "css", "rest api", "web scraping"
+    "html",
+    "css",
+    "javascript",
+    "bootstrap",
+    "tailwind css",
+    "jquery",
+    "php",
+    "sqlite",
+    "basic sql",
+    "c",
+    "cpp",
+    "java basics",
+    "python basics",
+    "git",
+    "github",
+    "bash",
+    "markdown",
+    "excel",
+    "vs code",
+    "json"
 }
 
 
