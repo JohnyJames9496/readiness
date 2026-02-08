@@ -46,7 +46,7 @@ def score_skills(skills: list):
             "severity": "medium",
             "summary": "No advanced-level skills detected.",
             "reasons": ["Only beginner or intermediate skills listed"],
-            "action": "Add at least one advanced-level skill like FastAPI, Docker, or AWS."
+            "action": "Learn atleast one advanced skill to boost your readiness score."
         })
 
     score = min(score, 25)
