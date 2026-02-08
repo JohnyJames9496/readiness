@@ -1,13 +1,14 @@
-def aggregate_feedback(edu, skills, projects):
-    result = []
+def aggregate_feedback(education, skills, projects):
+    """
+    Aggregates feedback from all sections.
+    Project feedback is already unified and reason-oriented.
+    """
 
-    for f in projects["feedback"]:
-        result.append({"area": "projects", "severity": "high", "message": f})
+    feedback = []
 
-    for f in skills["feedback"]:
-        result.append({"area": "skills", "severity": "medium", "message": f})
+    feedback.extend(projects.get("feedback", []))
+    feedback.extend(skills.get("feedback", []))
+    feedback.extend(education.get("feedback", []))
 
-    for f in edu["feedback"]:
-        result.append({"area": "education", "severity": "low", "message": f})
-
-    return result[:5]
+    # Limit feedback noise
+    return feedback[:5]
