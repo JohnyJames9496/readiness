@@ -25,7 +25,7 @@ def score_user_profile(profile: dict):
 
     feedback = aggregate_feedback(edu, skills, projects)
 
-    # ✅ Overall positive feedback
+
     if not feedback:
         feedback = [{
             "area": "overall",

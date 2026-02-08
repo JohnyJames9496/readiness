@@ -9,7 +9,7 @@ def score_education(profile: dict):
     course = profile.get("course")
     cgpa = profile.get("cgpa")
 
-    # College (2 pts)
+   
     if college:
         score += 2
     else:
@@ -21,7 +21,7 @@ def score_education(profile: dict):
             "action": "Add your college or university name."
         })
 
-    # Course (3 pts)
+   
     if course:
         score += 3
     else:
@@ -33,7 +33,7 @@ def score_education(profile: dict):
             "action": "Add your course or degree name."
         })
 
-    # CGPA (15 pts)
+   
     if isinstance(cgpa, (int, float, Decimal)):
         cgpa_val = float(cgpa)
         if cgpa_val >= 9.0:
