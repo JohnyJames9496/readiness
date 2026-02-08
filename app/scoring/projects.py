@@ -8,84 +8,118 @@ ACTION_VERBS = [
 def score_projects(projects: list):
     result = {
         "project_score": 0,
-        "feedback": []
+        "feedback": [],           # section-level
+        "project_feedback": []    # per-project
     }
 
-    if not projects or len(projects) == 0:
+    if not projects:
         result["feedback"].append({
             "area": "projects",
             "severity": "high",
             "summary": "No projects found.",
-            "reasons": ["No projects have been added"],
+            "reasons": ["No hands-on development work listed"],
             "action": "Add at least 2–3 real-world projects."
         })
         return result
 
-    reasons = []
+    section_reasons = []
 
     # Quantity (25)
     count = len(projects)
     if count == 1:
         quantity_score = 15
-        reasons.append("Only one project listed")
+        section_reasons.append("Only one project listed")
     elif count == 2:
         quantity_score = 20
     else:
         quantity_score = 25
 
-    # Description quality (15)
-    detailed = sum(
-        1 for p in projects
-        if len(p.get("description", "").strip()) > 150
-    )
+    long_desc_count = 0
+    action_count = 0
 
-    if detailed == 0:
+    for project in projects:
+        title = project.get("title", "Untitled Project")
+        desc = project.get("description", "").strip().lower()
+        tech_stack = project.get("tech_stack")
+
+        issues = []
+
+        # Description
+        if len(desc) > 150:
+            long_desc_count += 1
+        else:
+            issues.append("Project description is too short or vague")
+
+        # Action verbs
+        if any(v in desc for v in ACTION_VERBS):
+            action_count += 1
+        else:
+            issues.append("No action verbs showing implementation or impact")
+
+        # Tech stack
+        if not tech_stack:
+            issues.append("No technologies or tech stack listed")
+
+        if issues:
+            result["project_feedback"].append({
+                "project": title,
+                "severity": "needs_improvement",
+                "issues": issues,
+                "action": (
+                    "Rewrite this project description to clearly explain:\n"
+                    "- The real-world problem\n"
+                    "- What you implemented or optimized\n"
+                    "- Technologies and tools used\n"
+                    "- Measurable impact or outcome"
+                )
+            })
+        else:
+            result["project_feedback"].append({
+                "project": title,
+                "severity": "strong",
+                "summary": "This project demonstrates strong technical execution.",
+                "highlights": [
+                    "Clear problem statement",
+                    "Strong implementation using relevant technologies",
+                    "Action-oriented description with measurable impact"
+                ],
+                "action": "You can confidently showcase this project in interviews and resumes."
+            })
+
+    # Description score (15)
+    if long_desc_count == 0:
         description_score = 0
-        reasons.extend([
-            "Project descriptions are too vague",
-            "No real-world problem mentioned",
-            "No technical details provided"
-        ])
-    elif detailed == 1:
+        section_reasons.append("All project descriptions are weak or too short")
+    elif long_desc_count == 1:
         description_score = 5
-        reasons.append("Only one project has a detailed description")
-    elif detailed == 2:
+        section_reasons.append("Only one project has a detailed description")
+    elif long_desc_count == 2:
         description_score = 10
     else:
         description_score = 15
 
-    # Action / impact (15)
-    action_hits = sum(
-        1 for p in projects
-        if any(v in p.get("description", "").lower() for v in ACTION_VERBS)
-    )
-
-    if action_hits == 0:
+    # Action score (15)
+    if action_count == 0:
         action_score = 0
-        reasons.append("No action verbs used to show implementation")
-    elif action_hits == 1:
+        section_reasons.append("No projects demonstrate clear implementation")
+    elif action_count == 1:
         action_score = 5
-        reasons.append("Limited use of action-oriented language")
-    elif action_hits == 2:
+        section_reasons.append("Limited use of action-oriented language")
+    elif action_count == 2:
         action_score = 10
     else:
         action_score = 15
 
     final_score = quantity_score + description_score + action_score
-    final_score = min(final_score, 55)
+    result["project_score"] = min(final_score, 55)
 
-    result["project_score"] = final_score
-
-    if reasons:
+    if section_reasons:
         result["feedback"].append({
             "area": "projects",
-            "severity": "high" if final_score < 40 else "medium",
-            "summary": "Project quality does not meet internship readiness standards.",
-            "reasons": reasons,
-            "action": (
-                "Rewrite project descriptions to explain the problem, "
-                "technologies used, what you implemented, and the impact."
-            )
+            "severity": "medium" if final_score >= 40 else "high",
+            "summary": "Project section needs improvement.",
+            "reasons": section_reasons,
+            "action": "Improve execution clarity and technical depth across projects."
         })
 
     return result

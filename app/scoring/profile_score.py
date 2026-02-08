@@ -12,7 +12,7 @@ def readiness_level(score: int) -> str:
     return "High"
 
 
-def score_user_profile(profile: dict) -> dict:
+def score_user_profile(profile: dict):
     edu = score_education(profile)
     skills = score_skills(profile.get("skills", []))
     projects = score_projects(profile.get("projects", []))
@@ -21,10 +21,23 @@ def score_user_profile(profile: dict) -> dict:
     skills_score = skills["skills_score"]
     project_score = projects["project_score"]
 
-    final_score = education_score + skills_score + project_score
-    final_score = min(final_score, 100)
+    final_score = min(education_score + skills_score + project_score, 100)
 
     feedback = aggregate_feedback(edu, skills, projects)
+
+    # ✅ Overall positive feedback
+    if not feedback:
+        feedback = [{
+            "area": "overall",
+            "severity": "success",
+            "summary": "You are internship-ready.",
+            "reasons": [
+                "Strong academic performance",
+                "Relevant technical skills",
+                "High-quality real-world projects"
+            ],
+            "action": "Start applying confidently to internships and entry-level roles."
+        }]
 
     return {
         "education_score": education_score,
@@ -33,5 +46,6 @@ def score_user_profile(profile: dict) -> dict:
         "final_score": final_score,
         "percentage_score": float(final_score),
         "readiness_level": readiness_level(final_score),
-        "feedback": feedback
+        "feedback": feedback,
+        "project_feedback": projects.get("project_feedback", [])
     }

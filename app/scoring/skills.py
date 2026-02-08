@@ -16,7 +16,7 @@ def score_skills(skills: list):
     score = 0
     feedback = []
 
-    if not skills or len(skills) == 0:
+    if not skills:
         return {
             "skills_score": 0,
             "feedback": [{
@@ -46,12 +46,10 @@ def score_skills(skills: list):
             "severity": "medium",
             "summary": "No advanced-level skills detected.",
             "reasons": ["Only beginner or intermediate skills listed"],
-            "action": "Learn atleast one advanced skill to boost your readiness score."
+            "action": "Add at least one advanced skill like FastAPI, Docker, or AWS."
         })
 
-    score = min(score, 25)
-
     return {
-        "skills_score": score,
+        "skills_score": min(score, 25),
         "feedback": feedback
     }

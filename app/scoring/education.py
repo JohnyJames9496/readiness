@@ -1,4 +1,6 @@
 from decimal import Decimal
+
+
 def score_education(profile: dict):
     score = 0
     feedback = []
@@ -7,7 +9,7 @@ def score_education(profile: dict):
     course = profile.get("course")
     cgpa = profile.get("cgpa")
 
-    # College name (2 pts)
+    # College (2 pts)
     if college:
         score += 2
     else:
@@ -19,7 +21,7 @@ def score_education(profile: dict):
             "action": "Add your college or university name."
         })
 
-    # Course name (3 pts)
+    # Course (3 pts)
     if course:
         score += 3
     else:
@@ -28,14 +30,15 @@ def score_education(profile: dict):
             "severity": "medium",
             "summary": "Course name missing.",
             "reasons": ["Course or degree name is not provided"],
-            "action": "Add your degree or course name."
+            "action": "Add your course or degree name."
         })
 
     # CGPA (15 pts)
     if isinstance(cgpa, (int, float, Decimal)):
-        if cgpa >= 9.0:
+        cgpa_val = float(cgpa)
+        if cgpa_val >= 9.0:
             score += 15
-        elif cgpa >= 8.0:
+        elif cgpa_val >= 8.0:
             score += 10
             feedback.append({
                 "area": "education",
