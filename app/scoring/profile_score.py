@@ -1,7 +1,10 @@
+# app/scoring/profile_score.py
+
 from app.scoring.education import score_education
 from app.scoring.skills import score_skills
 from app.scoring.projects import score_projects
 from app.scoring.feedback import aggregate_feedback
+
 
 def readiness_level(score):
     if score < 40:
@@ -10,6 +13,7 @@ def readiness_level(score):
         return "Medium"
     return "High"
 
+
 def score_user_profile(profile):
     edu = score_education(profile)
     skills = score_skills(profile.get("skills", []))
@@ -17,7 +21,7 @@ def score_user_profile(profile):
 
     final_score = (
         edu["education_score"]
-        + skills["skills_score"]     # ✅ FIXED
+        + skills["skills_score"]       # ✅ CONSISTENT
         + projects["project_score"]
     )
 
